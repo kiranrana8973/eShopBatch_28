@@ -1,3 +1,6 @@
+import 'package:eshopping/screen/bottom_screen/cart.dart';
+import 'package:eshopping/screen/bottom_screen/home.dart';
+import 'package:eshopping/screen/bottom_screen/profile.dart';
 import 'package:eshopping/screen/dashboard.dart';
 import 'package:eshopping/screen/login.dart';
 import 'package:eshopping/screen/register.dart';
@@ -14,6 +17,9 @@ void main() {
         '/login': (context) => const LoginScreen(),
         '/register': (context) => const RegisterScreen(),
         '/dashboard': (context) => const DashboardScreen(),
+        '/home': (context) => const HomeScreen(),
+        '/profile': (context) => const ProfileScreen(),
+        '/cart': (context) => const CartScreen(),
       },
     ),
   );
