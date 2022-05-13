@@ -1,3 +1,4 @@
+import 'package:eshopping/screen/dashboard.dart';
 import 'package:eshopping/screen/login.dart';
 import 'package:eshopping/screen/register.dart';
 import 'package:eshopping/screen/splash.dart';
@@ -12,6 +13,7 @@ void main() {
         '/': (context) => const SplashScreen(),
         '/login': (context) => const LoginScreen(),
         '/register': (context) => const RegisterScreen(),
+        '/dashboard': (context) => const DashboardScreen(),
       },
     ),
   );

@@ -1,3 +1,4 @@
+import 'package:eshopping/repositories/user_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:motion_toast/motion_toast.dart';
 
@@ -10,11 +11,27 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
-  final _usernameController = TextEditingController();
-  final _passwordController = TextEditingController();
+  final _usernameController = TextEditingController(text: 'admin');
+  final _passwordController = TextEditingController(text: 'admin');
 
   _login() async {
-    try {} catch (e) {
+    try {
+      UserRepository userRepository = UserRepository();
+      bool isLogin = await userRepository.login(
+        _usernameController.text,
+        _passwordController.text,
+      );
+
+      if (isLogin) {
+        // ignore: use_build_context_synchronously
+        Navigator.pushReplacementNamed(context, '/dashboard');
+      } else {
+        // ignore: use_build_context_synchronously
+        MotionToast.error(
+          description: const Text("Either username or password is not correct"),
+        ).show(context);
+      }
+    } catch (e) {
       MotionToast.error(
         description: Text("Error : ${e.toString()}"),
       ).show(context);

@@ -1,7 +1,7 @@
 import 'package:eshopping/model/user.dart';
 import 'package:eshopping/repositories/user_repository.dart';
+import 'package:eshopping/utils/showMessage.dart';
 import 'package:flutter/material.dart';
-import 'package:motion_toast/motion_toast.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({Key? key}) : super(key: key);
@@ -22,17 +22,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   @override
   Widget build(BuildContext context) {
-    _registerUser(User user) {
-      bool isLogin = UserRepository().registerUser(user);
+    _showMessage(bool isLogin) {
       if (isLogin) {
-        MotionToast.success(
-          enableAnimation: true,
-          description: const Text("Register Successfully"),
-        ).show(context);
+        displaySuccessMessage(context, "User registered successfully");
       } else {
-        MotionToast.error(
-          description: const Text("Register Failed"),
-        );
+        displayErrorMessage(context, "User registration failed");
+      }
+    }
+
+    _registerUser(User user) async {
+      bool isLogin = await UserRepository().registerUser(user);
+      if (isLogin) {
+        _showMessage(true);
+      } else {
+        _showMessage(false);
       }
     }
 

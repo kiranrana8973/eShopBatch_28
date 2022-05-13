@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:eshopping/constants/api_url.dart';
+import 'package:eshopping/utils/api_url.dart';
 
 class HttpServices {
   static final HttpServices _instance = HttpServices._internal();

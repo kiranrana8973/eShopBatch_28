@@ -1,8 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:eshopping/api/http_services.dart';
-import 'package:eshopping/constants/api_url.dart';
+import 'package:eshopping/response/login_response.dart';
+import 'package:eshopping/utils/api_url.dart';
 import 'package:eshopping/model/user.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 class UserAPI {
   Future<bool> registerUser(User user) async {
@@ -21,7 +22,30 @@ class UserAPI {
     } catch (e) {
       debugPrint(e.toString());
     }
-
     return isLogin;
+  }
+
+  Future<bool> login(String username, String password) async {
+    try {
+      var url = baseUrl + loginUrl;
+      var dio = HttpServices().getDioInstance();
+
+      var response = await dio.post(
+        url,
+        data: {
+          "username": username,
+          "password": password,
+        },
+      );
+      if (response.statusCode == 200) {
+        LoginResponse loginResponse = LoginResponse.fromJson(response.data);
+        token = loginResponse.token;
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      throw Exception(e);
+    }
   }
 }
