@@ -40,7 +40,6 @@ dev_dependencies:
     sdk: flutter
   build_runner: ^2.1.10
   floor_generator: ^1.2.0
-  
   flutter_lints: ^2.0.0
 
 # For information on the generic Dart part of this file, see the
