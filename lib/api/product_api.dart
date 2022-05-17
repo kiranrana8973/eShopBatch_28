@@ -1,11 +1,11 @@
 import 'package:dio/dio.dart';
 import 'package:eshopping/api/http_services.dart';
 import 'package:eshopping/response/get_product_response.dart';
-
 import '../utils/api_url.dart';
 
 class ProductAPI {
   Future<ProductResponse?> getProducts() async {
+    Future.delayed(const Duration(seconds: 2), () {});
     ProductResponse? productResponse;
     try {
       var url = baseUrl + getProductsUrl;

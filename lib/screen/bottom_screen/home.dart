@@ -1,5 +1,5 @@
 import 'package:eshopping/repositories/product_repositories.dart';
-import 'package:eshopping/response/get_product_response.dart';
+import 'package:eshopping/response/product_category.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -13,22 +13,75 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    _loadData();
+    // _loadData();
   }
 
   _loadData() async {
-    ProductResponse productResponse = await ProductRepository().getProducts();
-    for (var product in productResponse.data!) {
-      print(product.name);
-    }
-    // var length = productResponse.data!.length.toString();
+    var a = await ProductRepository().getProducts();
+    return a;
   }
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(
-        child: Text("Home screen"),
+    return Scaffold(
+      body: SafeArea(
+        child: FutureBuilder(
+          future: _loadData(),
+          builder: (context, AsyncSnapshot snapshot) {
+            var state = snapshot.connectionState;
+            if (state == ConnectionState.done) {
+              if (snapshot.hasData) {
+                var data = snapshot.data;
+                List<ProductCategory> lstProductCategory = [];
+                // extract data from data
+                lstProductCategory = data.data;
+
+                return ListView.builder(
+                  itemCount: lstProductCategory.length,
+                  itemBuilder: (context, index) {
+                    return ListTile(
+                      title: Text(lstProductCategory[index].name!),
+                      subtitle: Text(lstProductCategory[index].description!),
+                    );
+                  },
+                );
+              } else {
+                return const Center(
+                  child: Text("No data"),
+                );
+              }
+            } else if (state == ConnectionState.waiting) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            } else if (snapshot.hasError) {
+              return Text("${snapshot.error}");
+            } else {
+              return const Center(
+                child: CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+                ),
+              );
+            }
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget displayProducts(ProductCategory productCategory) {
+    return Card(
+      child: Stack(
+        children: [
+          SizedBox(
+            height: 200,
+            width: double.infinity,
+            child: Image.network(
+              productCategory.image!,
+              fit: BoxFit.cover,
+            ),
+          ),
+        ],
       ),
     );
   }

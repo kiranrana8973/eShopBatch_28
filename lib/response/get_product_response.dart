@@ -1,6 +1,5 @@
 import 'package:eshopping/response/product_category.dart';
 import 'package:json_annotation/json_annotation.dart';
-
 part 'get_product_response.g.dart';
 
 @JsonSerializable()
