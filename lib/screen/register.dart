@@ -2,6 +2,7 @@ import 'package:eshopping/model/user.dart';
 import 'package:eshopping/repositories/user_repository.dart';
 import 'package:eshopping/utils/showMessage.dart';
 import 'package:flutter/material.dart';
+import 'package:motion_toast/motion_toast.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({Key? key}) : super(key: key);
@@ -20,25 +21,27 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final _passwordController = TextEditingController(text: "Test");
   final _confirmPasswordController = TextEditingController(text: "Test");
 
+  _registerUser(User user) async {
+    bool isLogin = await UserRepository().registerUser(user);
+    if (isLogin) {
+      _showMessage(true);
+    } else {
+      _showMessage(false);
+    }
+  }
+
+  _showMessage(bool isLogin) {
+    if (isLogin) {
+      MotionToast.success(
+        description: const Text("Success"),
+      ).show(context);
+    } else {
+      displayErrorMessage(context, "User registration failed");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    _showMessage(bool isLogin) {
-      if (isLogin) {
-        displaySuccessMessage(context, "User registered successfully");
-      } else {
-        displayErrorMessage(context, "User registration failed");
-      }
-    }
-
-    _registerUser(User user) async {
-      bool isLogin = await UserRepository().registerUser(user);
-      if (isLogin) {
-        _showMessage(true);
-      } else {
-        _showMessage(false);
-      }
-    }
-
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 253, 250, 221),
       appBar: AppBar(

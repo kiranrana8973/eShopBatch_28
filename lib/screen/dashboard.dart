@@ -28,7 +28,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.cyan[200],
-        onPressed: () {},
+        onPressed: () {
+          Navigator.pushNamed(context, '/addProduct');
+        },
         child: const Icon(Icons.add_a_photo_rounded), //icon inside button
       ),
 

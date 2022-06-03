@@ -54,7 +54,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     // SizedBox(
                     //   height: 150,
                     //   child: SvgPicture.asset(
-                    //     "assets/svg/student-hat-2.svg",
+                    //     "assets/svg/shopping.svg",
                     //     color: Colors.blue,
                     //   ),
                     // ),
