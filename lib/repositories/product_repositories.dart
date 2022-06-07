@@ -9,7 +9,7 @@ class ProductRepository {
     return ProductAPI().getProducts();
   }
 
-  Future<bool> addProduct(File file) async {
+  Future<bool> addProduct(File? file) async {
     return ProductAPI().addProduct(file);
   }
 }

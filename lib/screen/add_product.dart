@@ -146,7 +146,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 gap,
                 ElevatedButton(
                   onPressed: () {
-                    ProductRepository().addProduct(img!);
+                    ProductRepository().addProduct(img);
                   },
                   child: const Text('Add Product'),
                 ),

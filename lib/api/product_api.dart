@@ -30,13 +30,19 @@ class ProductAPI {
     try {
       var url = baseUrl + productUrl;
       var dio = HttpServices().getDioInstance();
-      var mimeType = lookupMimeType(file!.path);
-      var image = await MultipartFile.fromFile(file.path,
+      MultipartFile? image;
+      if (file != null) {
+        var mimeType = lookupMimeType(file.path);
+
+        image = await MultipartFile.fromFile(
+          file.path,
           filename: "test1",
-          contentType: MediaType("image", mimeType!.split("/")[1]));
+          contentType: MediaType("image", mimeType!.split("/")[1]),
+        ); // image/jpeg -> jpeg
+      }
+
       var formData = FormData.fromMap(
         {
-          // "image": await MultipartFile.fromFile(file.path, filename: file.path),
           "name": "test",
           "description": "test",
           "image": image,
