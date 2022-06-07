@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:eshopping/repositories/product_repositories.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -14,16 +15,26 @@ class AddProductScreen extends StatefulWidget {
 
 class _AddProductScreenState extends State<AddProductScreen> {
   Map<String, String>? productCategory = <String, String>{};
+
+  final List<String> _values = [];
   @override
   void initState() {
     super.initState();
     _loadCategory();
   }
 
+  String dropdownValue = "One";
+
   _loadCategory() async {
     productCategory = await CategoryRepository().getCategory();
-    // List<String> keys = map!.keys.toList();
-    // List<String> values = map!.values.toList();
+    setState(() {
+      //  _values = productCategory!.values.toList();
+    });
+    // if (productCategory != null) {
+    //   _selectedItem = _values[0];
+    // } else {
+    //   _selectedItem = "No data";
+    // }
   }
 
   // Load camera and gallery images and store it to the File object.
@@ -45,7 +56,6 @@ class _AddProductScreenState extends State<AddProductScreen> {
 
   var gap = const SizedBox(height: 10);
 
-  var lstCategory = [];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -87,6 +97,28 @@ class _AddProductScreenState extends State<AddProductScreen> {
                   ],
                 ),
                 gap,
+                DropdownButton<String>(
+                  value: dropdownValue,
+                  icon: const Icon(Icons.arrow_downward),
+                  elevation: 16,
+                  style: const TextStyle(color: Colors.deepPurple),
+                  underline: Container(
+                    height: 2,
+                    color: Colors.deepPurpleAccent,
+                  ),
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      dropdownValue = newValue!;
+                    });
+                  },
+                  items: _values.map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                ),
+                gap,
                 TextFormField(
                   decoration: const InputDecoration(
                     labelText: 'Product Name',
@@ -95,9 +127,6 @@ class _AddProductScreenState extends State<AddProductScreen> {
                   ),
                 ),
                 const SizedBox(height: 8),
-                // DropdownButton(
-                //     items: productCategory.values.toList(),
-                //     onChanged: (value) {}),
                 gap,
                 TextFormField(
                   decoration: const InputDecoration(
@@ -113,6 +142,13 @@ class _AddProductScreenState extends State<AddProductScreen> {
                     hintText: 'Enter Product Description',
                     border: OutlineInputBorder(),
                   ),
+                ),
+                gap,
+                ElevatedButton(
+                  onPressed: () {
+                    ProductRepository().addProduct(img!);
+                  },
+                  child: const Text('Add Product'),
                 ),
               ],
             ),
