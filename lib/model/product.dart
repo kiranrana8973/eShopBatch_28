@@ -11,10 +11,10 @@ class Product {
   String? richDescription;
   String? image;
   String? brand;
-  int? price;
+  double? price;
   String? category;
   int? countInStock;
-  String? rating;
+  int? rating;
   int? numReviews;
   bool? isFeatured;
 

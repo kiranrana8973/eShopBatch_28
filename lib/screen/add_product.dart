@@ -1,10 +1,11 @@
 import 'dart:io';
 
-import 'package:eshopping/repositories/product_repositories.dart';
+import 'package:eshopping/model/product.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../repositories/category_repository.dart';
+import '../repositories/product_repositories.dart';
 
 class AddProductScreen extends StatefulWidget {
   const AddProductScreen({Key? key}) : super(key: key);
@@ -27,14 +28,6 @@ class _AddProductScreenState extends State<AddProductScreen> {
 
   _loadCategory() async {
     productCategory = await CategoryRepository().getCategory();
-    setState(() {
-      //  _values = productCategory!.values.toList();
-    });
-    // if (productCategory != null) {
-    //   _selectedItem = _values[0];
-    // } else {
-    //   _selectedItem = "No data";
-    // }
   }
 
   // Load camera and gallery images and store it to the File object.
@@ -56,14 +49,19 @@ class _AddProductScreenState extends State<AddProductScreen> {
 
   var gap = const SizedBox(height: 10);
 
+  var nameController = TextEditingController(text: "Apple tv");
+  var descriptionController = TextEditingController(text: "Apple tv");
+  var priceController = TextEditingController(text: "100");
+  var categoryController =
+      TextEditingController(text: "6281fdb044d29546f08846d4");
+  var countInStockController = TextEditingController(text: "2");
+  var ratingController = TextEditingController(text: "3");
+  var numReviewsController = TextEditingController(text: "3");
+  var isFeaturedController = TextEditingController(text: "false");
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Add Product'),
-        centerTitle: true,
-        backgroundColor: Colors.redAccent,
-      ),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
@@ -71,7 +69,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
             child: Column(
               children: [
                 _displayImage(),
-                const SizedBox(height: 8),
+
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
@@ -96,30 +94,19 @@ class _AddProductScreenState extends State<AddProductScreen> {
                     ),
                   ],
                 ),
-                gap,
-                DropdownButton<String>(
-                  value: dropdownValue,
-                  icon: const Icon(Icons.arrow_downward),
-                  elevation: 16,
-                  style: const TextStyle(color: Colors.deepPurple),
-                  underline: Container(
-                    height: 2,
-                    color: Colors.deepPurpleAccent,
-                  ),
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      dropdownValue = newValue!;
-                    });
-                  },
-                  items: _values.map<DropdownMenuItem<String>>((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value),
-                    );
-                  }).toList(),
-                ),
+
+                // FutureBuilder(
+                //   future: _loadCategory(),
+                //   builder: (context, snapshot) {
+                //     if (snapshot.hasData) {
+                //       return DropdownButton<String>(
+                //         value: dropdownValue,
+                //         icon: const Icon(Icons.arrow_downward),
+                //       );
+                // ),
                 gap,
                 TextFormField(
+                  controller: nameController,
                   decoration: const InputDecoration(
                     labelText: 'Product Name',
                     hintText: 'Enter Product Name',
@@ -127,16 +114,8 @@ class _AddProductScreenState extends State<AddProductScreen> {
                   ),
                 ),
                 const SizedBox(height: 8),
-                gap,
                 TextFormField(
-                  decoration: const InputDecoration(
-                    labelText: 'Product Price',
-                    hintText: 'Enter Product Price',
-                    border: OutlineInputBorder(),
-                  ),
-                ),
-                const SizedBox(height: 8),
-                TextFormField(
+                  controller: descriptionController,
                   decoration: const InputDecoration(
                     labelText: 'Product Description',
                     hintText: 'Enter Product Description',
@@ -144,11 +123,74 @@ class _AddProductScreenState extends State<AddProductScreen> {
                   ),
                 ),
                 gap,
-                ElevatedButton(
-                  onPressed: () {
-                    ProductRepository().addProduct(img);
-                  },
-                  child: const Text('Add Product'),
+                TextFormField(
+                  keyboardType: TextInputType.number,
+                  controller: priceController,
+                  decoration: const InputDecoration(
+                    labelText: 'Product Price',
+                    hintText: 'Enter Product Price',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+                gap,
+                TextFormField(
+                  controller: categoryController,
+                  decoration: const InputDecoration(
+                    labelText: 'Product Category',
+                    hintText: 'Select Product Category',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+                gap,
+                TextFormField(
+                  keyboardType: TextInputType.number,
+                  controller: countInStockController,
+                  decoration: const InputDecoration(
+                    labelText: 'Count in Stock',
+                    hintText: 'Enter count in stock',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+                const SizedBox(height: 8),
+                gap,
+                TextFormField(
+                  keyboardType: TextInputType.number,
+                  controller: ratingController,
+                  decoration: const InputDecoration(
+                    labelText: 'Rating',
+                    hintText: 'Enter rating',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+                gap,
+                TextFormField(
+                  keyboardType: TextInputType.number,
+                  controller: numReviewsController,
+                  decoration: const InputDecoration(
+                    labelText: 'Num reviews',
+                    hintText: 'Enter num reviews',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton.icon(
+                    icon: const Icon(Icons.add),
+                    onPressed: () {
+                      Product product = Product(
+                        name: nameController.text,
+                        description: descriptionController.text,
+                        price: double.parse(priceController.text),
+                        category: categoryController.text,
+                        countInStock: int.parse(countInStockController.text),
+                        rating: int.parse(ratingController.text),
+                        numReviews: int.parse(numReviewsController.text),
+                        isFeatured: false,
+                      );
+                      ProductRepository().addProduct(img, product);
+                    },
+                    label: const Text('Add Product'),
+                  ),
                 ),
               ],
             ),
@@ -177,11 +219,15 @@ class _AddProductScreenState extends State<AddProductScreen> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: img == null
-                    ? Image.network(
-                        'http://www.clker.com/cliparts/o/G/p/l/g/M/add-student-hi.png',
-                        fit: BoxFit.fill,
-                        height: MediaQuery.of(context).size.height * 0.4,
-                        width: double.infinity,
+                    ? SizedBox(
+                        height: 200,
+                        width: 200,
+                        child: Image.network(
+                          'http://www.clker.com/cliparts/o/G/p/l/g/M/add-student-hi.png',
+                          fit: BoxFit.fill,
+                          height: MediaQuery.of(context).size.height * 0.4,
+                          width: double.infinity,
+                        ),
                       )
                     : Image.file(img!),
               ),
@@ -192,3 +238,27 @@ class _AddProductScreenState extends State<AddProductScreen> {
     );
   }
 }
+
+
+
+//  DropdownButton<String>(
+//                   value: dropdownValue,
+//                   icon: const Icon(Icons.arrow_downward),
+//                   elevation: 16,
+//                   style: const TextStyle(color: Colors.deepPurple),
+//                   underline: Container(
+//                     height: 2,
+//                     color: Colors.deepPurpleAccent,
+//                   ),
+//                   onChanged: (String? newValue) {
+//                     setState(() {
+//                       dropdownValue = newValue!;
+//                     });
+//                   },
+//                   items: _values.map<DropdownMenuItem<String>>((String value) {
+//                     return DropdownMenuItem<String>(
+//                       value: value,
+//                       child: Text(value),
+//                     );
+//                   }).toList(),
+//                 ),
