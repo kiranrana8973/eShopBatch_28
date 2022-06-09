@@ -1,10 +1,12 @@
 import 'dart:io';
 
 import 'package:eshopping/model/product.dart';
+import 'package:eshopping/repositories/category_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:motion_toast/motion_toast.dart';
 
-import '../repositories/category_repository.dart';
+import '../model/dropdown_category.dart';
 import '../repositories/product_repositories.dart';
 
 class AddProductScreen extends StatefulWidget {
@@ -15,9 +17,6 @@ class AddProductScreen extends StatefulWidget {
 }
 
 class _AddProductScreenState extends State<AddProductScreen> {
-  Map<String, String>? productCategory = <String, String>{};
-
-  final List<String> _values = [];
   @override
   void initState() {
     super.initState();
@@ -25,9 +24,9 @@ class _AddProductScreenState extends State<AddProductScreen> {
   }
 
   String dropdownValue = "One";
-
+  List<DropdownCategory?> _dropdownCategoryList = [];
   _loadCategory() async {
-    productCategory = await CategoryRepository().getCategory();
+    _dropdownCategoryList = await CategoryRepository().loadCategory();
   }
 
   // Load camera and gallery images and store it to the File object.
@@ -47,8 +46,26 @@ class _AddProductScreenState extends State<AddProductScreen> {
     }
   }
 
-  var gap = const SizedBox(height: 10);
+  _addProduct(Product product) async {
+    bool isAdded = await ProductRepository().addProduct(img, product);
+    if (isAdded) {
+      _displayMessage(isAdded);
+    } else {
+      _displayMessage(isAdded);
+    }
+  }
 
+  _displayMessage(bool isAdded) {
+    if (isAdded) {
+      MotionToast.success(description: const Text("Product added successfully"))
+          .show(context);
+    } else {
+      MotionToast.error(description: const Text("Error adding product"))
+          .show(context);
+    }
+  }
+
+  var gap = const SizedBox(height: 10);
   var nameController = TextEditingController(text: "Apple tv");
   var descriptionController = TextEditingController(text: "Apple tv");
   var priceController = TextEditingController(text: "100");
@@ -187,7 +204,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                         numReviews: int.parse(numReviewsController.text),
                         isFeatured: false,
                       );
-                      ProductRepository().addProduct(img, product);
+                      _addProduct(product);
                     },
                     label: const Text('Add Product'),
                   ),

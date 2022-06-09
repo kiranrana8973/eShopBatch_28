@@ -1,5 +1,9 @@
 import 'package:eshopping/model/category.dart';
+import 'package:json_annotation/json_annotation.dart';
 
+part 'category_response.g.dart';
+
+@JsonSerializable()
 class CategoryResponse {
   bool? success;
   List<Category>? data;
@@ -10,18 +14,7 @@ class CategoryResponse {
   });
 
   factory CategoryResponse.fromJson(Map<String, dynamic> json) =>
-      CategoryResponse(
-        success: json['success'] as bool,
-        data: json['data'] == null
-            ? null
-            : List<Category>.from(
-                json['data'].productCategory((x) => Category.fromJson(x))),
-      );
+      _$CategoryResponseFromJson(json);
 
-  Map<String, dynamic> toJson() => {
-        'success': success,
-        'data': data == null
-            ? null
-            : List<dynamic>.from(data!.map((x) => x.toJson())),
-      };
+  Map<String, dynamic> toJson() => _$CategoryResponseToJson(this);
 }

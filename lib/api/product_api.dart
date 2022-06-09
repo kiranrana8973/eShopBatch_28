@@ -24,32 +24,17 @@ class ProductAPI {
         ); // image/jpeg -> jpeg
       }
 
-      // var formData = FormData.fromMap(
-      //   {
-      //     "name": "test",
-      //     "description": "test",
-      //     "image": image,
-      //     "price": "234",
-      //     "category": "6281fdb044d29546f08846d4",
-      //     "countInStock": "2",
-      //     "rating": "3",
-      //     "numReviews": "3",
-      //     "isFeatured": "false",
-      //   },
-      // );
-      var formData = FormData.fromMap(
-        {
-          "name": product.name,
-          "description": product.description,
-          "image": image,
-          "price": product.price,
-          "category": product.category,
-          "countInStock": product.countInStock,
-          "rating": product.rating,
-          "numReviews": product.numReviews,
-          "isFeatured": product.isFeatured,
-        },
-      );
+      var formData = FormData.fromMap({
+        "name": product.name,
+        "description": product.description,
+        "image": image,
+        "price": product.price,
+        "category": product.category,
+        "countInStock": product.countInStock,
+        "rating": product.rating,
+        "numReviews": product.numReviews,
+        "isFeatured": product.isFeatured,
+      });
       var response = await dio.post(url, data: formData);
 
       if (response.statusCode == 201) {
@@ -80,3 +65,18 @@ class ProductAPI {
     return productResponse;
   }
 }
+
+
+   // var formData = FormData.fromMap(
+      //   {
+      //     "name": "test",
+      //     "description": "test",
+      //     "image": image,
+      //     "price": "234",
+      //     "category": "6281fdb044d29546f08846d4",
+      //     "countInStock": "2",
+      //     "rating": "3",
+      //     "numReviews": "3",
+      //     "isFeatured": "false",
+      //   },
+      // );
