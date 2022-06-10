@@ -1,5 +1,6 @@
-import 'package:eshopping/model/category.dart';
+// ignore: depend_on_referenced_packages
 import 'package:json_annotation/json_annotation.dart';
+import 'package:eshopping/model/category.dart';
 
 part 'category_response.g.dart';
 
@@ -18,3 +19,4 @@ class CategoryResponse {
 
   Map<String, dynamic> toJson() => _$CategoryResponseToJson(this);
 }
+

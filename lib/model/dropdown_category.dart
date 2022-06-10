@@ -1,3 +1,4 @@
+// ignore: depend_on_referenced_packages
 import 'package:json_annotation/json_annotation.dart';
 part 'dropdown_category.g.dart';
 
@@ -17,3 +18,4 @@ class DropdownCategory {
 
   Map<String, dynamic> toJson() => _$DropdownCategoryToJson(this);
 }
+

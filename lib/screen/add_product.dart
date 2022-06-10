@@ -1,12 +1,12 @@
 import 'dart:io';
 
 import 'package:eshopping/model/product.dart';
-import 'package:eshopping/repositories/category_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:motion_toast/motion_toast.dart';
 
 import '../model/dropdown_category.dart';
+import '../repositories/category_repository.dart';
 import '../repositories/product_repositories.dart';
 
 class AddProductScreen extends StatefulWidget {
@@ -17,18 +17,6 @@ class AddProductScreen extends StatefulWidget {
 }
 
 class _AddProductScreenState extends State<AddProductScreen> {
-  @override
-  void initState() {
-    super.initState();
-    _loadCategory();
-  }
-
-  String dropdownValue = "One";
-  List<DropdownCategory?> _lstCategoryList = [];
-  _loadCategory() async {
-    _lstCategoryList = await CategoryRepository().loadCategory();
-  }
-
   // Load camera and gallery images and store it to the File object.
   File? img;
   Future _loadImage(ImageSource imageSource) async {
@@ -46,7 +34,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
     }
   }
 
-  final String _selectedValue = "Please select a value";
+  // Add product
   _addProduct(Product product) async {
     bool isAdded = await ProductRepository().addProduct(img, product);
     if (isAdded) {
@@ -56,6 +44,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
     }
   }
 
+  // Display message
   _displayMessage(bool isAdded) {
     if (isAdded) {
       MotionToast.success(description: const Text("Product added successfully"))
@@ -70,16 +59,18 @@ class _AddProductScreenState extends State<AddProductScreen> {
   var nameController = TextEditingController(text: "Apple tv");
   var descriptionController = TextEditingController(text: "Apple tv");
   var priceController = TextEditingController(text: "100");
-  var categoryController =
-      TextEditingController(text: "6281fdb044d29546f08846d4");
   var countInStockController = TextEditingController(text: "2");
   var ratingController = TextEditingController(text: "3");
   var numReviewsController = TextEditingController(text: "3");
   var isFeaturedController = TextEditingController(text: "false");
 
+  String? _dropdownvalue;
+  String? value;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.green[50],
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
@@ -87,6 +78,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
             child: Column(
               children: [
                 _displayImage(),
+                gap,
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
@@ -111,30 +103,6 @@ class _AddProductScreenState extends State<AddProductScreen> {
                     ),
                   ],
                 ),
-                // FutureBuilder(
-                //   future: _loadCategory(),
-                //   builder: (context, snapshot) {
-                //     if (snapshot.hasData) {
-                //       return DropdownButton(
-                //         onChanged: (String? newValue){
-                //           setState(() {
-                //             _selectedValue = newValue!;
-                //           });
-                //         },
-                //         value: _selectedValue,
-                //         items: _lstCategoryList
-                //             .map((DropdownCategory dropdownCategory) {
-                //               return DropdownMenuItem(
-                //                 value: dropdownCategory.id,
-                //                 child: Text(dropdownCategory.name),
-                //               );
-                //             })
-                //             .toList(),
-                //       ),
-
-                //     }
-                //   },
-                // ),
                 gap,
                 TextFormField(
                   controller: nameController,
@@ -164,13 +132,41 @@ class _AddProductScreenState extends State<AddProductScreen> {
                   ),
                 ),
                 gap,
-                TextFormField(
-                  controller: categoryController,
-                  decoration: const InputDecoration(
-                    labelText: 'Product Category',
-                    hintText: 'Select Product Category',
-                    border: OutlineInputBorder(),
-                  ),
+                //DropdownButton
+                FutureBuilder<List<DropdownCategory?>>(
+                  future: CategoryRepository().loadCategory(),
+                  builder: (context, snapshot) {
+                    _dropdownvalue = snapshot.data![0]!.id!;
+                    if (snapshot.hasData) {
+                      return DropdownButtonFormField(
+                        decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                          prefixIcon: Icon(Icons.category),
+                          hintText: 'Select Category',
+                        ),
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            value = newValue!;
+                          });
+                        },
+                        // Initial Value
+                        value: _dropdownvalue,
+                        // Down Arrow Icon
+                        icon: const Icon(Icons.keyboard_arrow_down),
+                        // Array list of items
+                        items: snapshot.data!.map((DropdownCategory? items) {
+                          return DropdownMenuItem<String>(
+                            value: items!.id!,
+                            child: Text(items.name!),
+                          );
+                        }).toList(),
+                      );
+                    } else if (snapshot.hasError) {
+                      return const Text("Error");
+                    } else {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+                  },
                 ),
                 gap,
                 TextFormField(
@@ -212,7 +208,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                         name: nameController.text,
                         description: descriptionController.text,
                         price: double.parse(priceController.text),
-                        category: categoryController.text,
+                        category: value,
                         countInStock: int.parse(countInStockController.text),
                         rating: int.parse(ratingController.text),
                         numReviews: int.parse(numReviewsController.text),
@@ -269,27 +265,3 @@ class _AddProductScreenState extends State<AddProductScreen> {
     );
   }
 }
-
-
-
-//  DropdownButton<String>(
-//                   value: dropdownValue,
-//                   icon: const Icon(Icons.arrow_downward),
-//                   elevation: 16,
-//                   style: const TextStyle(color: Colors.deepPurple),
-//                   underline: Container(
-//                     height: 2,
-//                     color: Colors.deepPurpleAccent,
-//                   ),
-//                   onChanged: (String? newValue) {
-//                     setState(() {
-//                       dropdownValue = newValue!;
-//                     });
-//                   },
-//                   items: _values.map<DropdownMenuItem<String>>((String value) {
-//                     return DropdownMenuItem<String>(
-//                       value: value,
-//                       child: Text(value),
-//                     );
-//                   }).toList(),
-//                 ),
