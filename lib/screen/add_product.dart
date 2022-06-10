@@ -17,17 +17,17 @@ class AddProductScreen extends StatefulWidget {
 }
 
 class _AddProductScreenState extends State<AddProductScreen> {
-  @override
-  void initState() {
-    super.initState();
-    _loadCategory();
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   // _loadCategory();
+  // }
 
-  String dropdownValue = "One";
-  List<DropdownCategory?> _dropdownCategoryList = [];
-  _loadCategory() async {
-    _dropdownCategoryList = await CategoryRepository().loadCategory();
-  }
+  // String dropdownValue = "One";
+  // List<DropdownCategory?> _dropdownCategoryList = [];
+  // _loadCategory() async {
+  //   _dropdownCategoryList = await CategoryRepository().loadCategory();
+  // }
 
   // Load camera and gallery images and store it to the File object.
   File? img;
@@ -65,12 +65,16 @@ class _AddProductScreenState extends State<AddProductScreen> {
     }
   }
 
+// For dropdown
+// Initial Selected Value
+  String? _dropdownvalue;
+
   var gap = const SizedBox(height: 10);
   var nameController = TextEditingController(text: "Apple tv");
   var descriptionController = TextEditingController(text: "Apple tv");
   var priceController = TextEditingController(text: "100");
   var categoryController =
-      TextEditingController(text: "6281fdb044d29546f08846d4");
+      TextEditingController(text: "62a14e46d51fa818bed4b26d");
   var countInStockController = TextEditingController(text: "2");
   var ratingController = TextEditingController(text: "3");
   var numReviewsController = TextEditingController(text: "3");
@@ -121,6 +125,54 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 //         icon: const Icon(Icons.arrow_downward),
                 //       );
                 // ),
+                // DropdownButton(
+                //   // Initial Value
+                //   value: dropdownvalue,
+                //   // Down Arrow Icon
+                //   icon: const Icon(Icons.keyboard_arrow_down),
+
+                //   // Array list of items
+                //   items: items.map((String items) {
+                //     return DropdownMenuItem(
+                //       value: items,
+                //       child: Text(items),
+                //     );
+                //   }).toList(),
+
+                //   onChanged: (String? newValue) {
+                //     setState(() {
+                //       dropdownvalue = newValue!;
+                //     });
+                //   },
+                // ),
+
+                FutureBuilder<List<DropdownCategory?>>(
+                    future: CategoryRepository().loadCategory(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        _dropdownvalue = snapshot.data![0]!.name!;
+                        return DropdownButton(
+                          onChanged: (String? newValue) {
+                            setState(() {
+                              _dropdownvalue = newValue!;
+                            });
+                          },
+                          // Initial Value
+                          value: _dropdownvalue,
+                          // Down Arrow Icon
+                          icon: const Icon(Icons.keyboard_arrow_down),
+                          // Array list of items
+                          items: snapshot.data!.map((DropdownCategory? items) {
+                            return DropdownMenuItem<String>(
+                              value: items!.name!,
+                              child: Text(items.name!),
+                            );
+                          }).toList(),
+                        );
+                      } else {
+                        return const Center(child: CircularProgressIndicator());
+                      }
+                    }),
                 gap,
                 TextFormField(
                   controller: nameController,
@@ -255,8 +307,6 @@ class _AddProductScreenState extends State<AddProductScreen> {
     );
   }
 }
-
-
 
 //  DropdownButton<String>(
 //                   value: dropdownValue,
