@@ -1,12 +1,12 @@
 import 'dart:io';
 
 import 'package:eshopping/model/product.dart';
-import 'package:eshopping/repositories/category_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:motion_toast/motion_toast.dart';
 
 import '../model/dropdown_category.dart';
+import '../repositories/category_repository.dart';
 import '../repositories/product_repositories.dart';
 
 class AddProductScreen extends StatefulWidget {
@@ -17,18 +17,6 @@ class AddProductScreen extends StatefulWidget {
 }
 
 class _AddProductScreenState extends State<AddProductScreen> {
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   // _loadCategory();
-  // }
-
-  // String dropdownValue = "One";
-  // List<DropdownCategory?> _dropdownCategoryList = [];
-  // _loadCategory() async {
-  //   _dropdownCategoryList = await CategoryRepository().loadCategory();
-  // }
-
   // Load camera and gallery images and store it to the File object.
   File? img;
   Future _loadImage(ImageSource imageSource) async {
@@ -65,16 +53,14 @@ class _AddProductScreenState extends State<AddProductScreen> {
     }
   }
 
-// For dropdown
-// Initial Selected Value
   String? _dropdownvalue;
 
   var gap = const SizedBox(height: 10);
   var nameController = TextEditingController(text: "Apple tv");
   var descriptionController = TextEditingController(text: "Apple tv");
   var priceController = TextEditingController(text: "100");
-  var categoryController =
-      TextEditingController(text: "62a14e46d51fa818bed4b26d");
+  // var categoryController =
+  //     TextEditingController(text: "62a14e46d51fa818bed4b26d");
   var countInStockController = TextEditingController(text: "2");
   var ratingController = TextEditingController(text: "3");
   var numReviewsController = TextEditingController(text: "3");
@@ -90,7 +76,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
             child: Column(
               children: [
                 _displayImage(),
-
+                gap,
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
@@ -115,65 +101,6 @@ class _AddProductScreenState extends State<AddProductScreen> {
                     ),
                   ],
                 ),
-
-                // FutureBuilder(
-                //   future: _loadCategory(),
-                //   builder: (context, snapshot) {
-                //     if (snapshot.hasData) {
-                //       return DropdownButton<String>(
-                //         value: dropdownValue,
-                //         icon: const Icon(Icons.arrow_downward),
-                //       );
-                // ),
-                // DropdownButton(
-                //   // Initial Value
-                //   value: dropdownvalue,
-                //   // Down Arrow Icon
-                //   icon: const Icon(Icons.keyboard_arrow_down),
-
-                //   // Array list of items
-                //   items: items.map((String items) {
-                //     return DropdownMenuItem(
-                //       value: items,
-                //       child: Text(items),
-                //     );
-                //   }).toList(),
-
-                //   onChanged: (String? newValue) {
-                //     setState(() {
-                //       dropdownvalue = newValue!;
-                //     });
-                //   },
-                // ),
-
-                FutureBuilder<List<DropdownCategory?>>(
-                    future: CategoryRepository().loadCategory(),
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        _dropdownvalue = snapshot.data![0]!.name!;
-                        return DropdownButton(
-                          onChanged: (String? newValue) {
-                            setState(() {
-                              _dropdownvalue = newValue!;
-                            });
-                          },
-                          // Initial Value
-                          value: _dropdownvalue,
-                          // Down Arrow Icon
-                          icon: const Icon(Icons.keyboard_arrow_down),
-                          // Array list of items
-                          items: snapshot.data!.map((DropdownCategory? items) {
-                            return DropdownMenuItem<String>(
-                              value: items!.name!,
-                              child: Text(items.name!),
-                            );
-                          }).toList(),
-                        );
-                      } else {
-                        return const Center(child: CircularProgressIndicator());
-                      }
-                    }),
-                gap,
                 TextFormField(
                   controller: nameController,
                   decoration: const InputDecoration(
@@ -202,14 +129,39 @@ class _AddProductScreenState extends State<AddProductScreen> {
                   ),
                 ),
                 gap,
-                TextFormField(
-                  controller: categoryController,
-                  decoration: const InputDecoration(
-                    labelText: 'Product Category',
-                    hintText: 'Select Product Category',
-                    border: OutlineInputBorder(),
-                  ),
-                ),
+                //DropdownButton
+                FutureBuilder<List<DropdownCategory?>>(
+                    future: CategoryRepository().loadCategory(),
+                    builder: (context, snapshot) {
+                      _dropdownvalue = snapshot.data![0]!.id!;
+                      if (snapshot.hasData) {
+                        return DropdownButtonFormField(
+                          decoration: const InputDecoration(
+                            border: OutlineInputBorder(),
+                            prefixIcon: Icon(Icons.category),
+                            hintText: 'Select Category',
+                          ),
+                          onChanged: (String? newValue) {
+                            setState(() {
+                              _dropdownvalue = newValue!;
+                            });
+                          },
+                          // Initial Value
+                          value: _dropdownvalue,
+                          // Down Arrow Icon
+                          icon: const Icon(Icons.keyboard_arrow_down),
+                          // Array list of items
+                          items: snapshot.data!.map((DropdownCategory? items) {
+                            return DropdownMenuItem<String>(
+                              value: items!.id!,
+                              child: Text(items.name!),
+                            );
+                          }).toList(),
+                        );
+                      } else {
+                        return const Center(child: CircularProgressIndicator());
+                      }
+                    }),
                 gap,
                 TextFormField(
                   keyboardType: TextInputType.number,
@@ -250,7 +202,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                         name: nameController.text,
                         description: descriptionController.text,
                         price: double.parse(priceController.text),
-                        category: categoryController.text,
+                        category: _dropdownvalue,
                         countInStock: int.parse(countInStockController.text),
                         rating: int.parse(ratingController.text),
                         numReviews: int.parse(numReviewsController.text),
@@ -307,25 +259,3 @@ class _AddProductScreenState extends State<AddProductScreen> {
     );
   }
 }
-
-//  DropdownButton<String>(
-//                   value: dropdownValue,
-//                   icon: const Icon(Icons.arrow_downward),
-//                   elevation: 16,
-//                   style: const TextStyle(color: Colors.deepPurple),
-//                   underline: Container(
-//                     height: 2,
-//                     color: Colors.deepPurpleAccent,
-//                   ),
-//                   onChanged: (String? newValue) {
-//                     setState(() {
-//                       dropdownValue = newValue!;
-//                     });
-//                   },
-//                   items: _values.map<DropdownMenuItem<String>>((String value) {
-//                     return DropdownMenuItem<String>(
-//                       value: value,
-//                       child: Text(value),
-//                     );
-//                   }).toList(),
-//                 ),
