@@ -24,9 +24,9 @@ class _AddProductScreenState extends State<AddProductScreen> {
   }
 
   String dropdownValue = "One";
-  List<DropdownCategory?> _dropdownCategoryList = [];
+  List<DropdownCategory?> _lstCategoryList = [];
   _loadCategory() async {
-    _dropdownCategoryList = await CategoryRepository().loadCategory();
+    _lstCategoryList = await CategoryRepository().loadCategory();
   }
 
   // Load camera and gallery images and store it to the File object.
@@ -46,6 +46,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
     }
   }
 
+  final String _selectedValue = "Please select a value";
   _addProduct(Product product) async {
     bool isAdded = await ProductRepository().addProduct(img, product);
     if (isAdded) {
@@ -86,7 +87,6 @@ class _AddProductScreenState extends State<AddProductScreen> {
             child: Column(
               children: [
                 _displayImage(),
-
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
@@ -111,15 +111,29 @@ class _AddProductScreenState extends State<AddProductScreen> {
                     ),
                   ],
                 ),
-
                 // FutureBuilder(
                 //   future: _loadCategory(),
                 //   builder: (context, snapshot) {
                 //     if (snapshot.hasData) {
-                //       return DropdownButton<String>(
-                //         value: dropdownValue,
-                //         icon: const Icon(Icons.arrow_downward),
-                //       );
+                //       return DropdownButton(
+                //         onChanged: (String? newValue){
+                //           setState(() {
+                //             _selectedValue = newValue!;
+                //           });
+                //         },
+                //         value: _selectedValue,
+                //         items: _lstCategoryList
+                //             .map((DropdownCategory dropdownCategory) {
+                //               return DropdownMenuItem(
+                //                 value: dropdownCategory.id,
+                //                 child: Text(dropdownCategory.name),
+                //               );
+                //             })
+                //             .toList(),
+                //       ),
+
+                //     }
+                //   },
                 // ),
                 gap,
                 TextFormField(

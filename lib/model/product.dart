@@ -32,6 +32,10 @@ class Product {
     this.isFeatured,
   });
 
+  //1. flutter clean
+  //2. flutter pub get
+
+//3. flutter pub run build_runner build
   factory Product.fromJson(Map<String, dynamic> json) {
     return _$ProductFromJson(json);
   }
