@@ -14,9 +14,11 @@ class CategoryAPI {
 
     try {
       response = await dio.get(url);
+
       if (response.statusCode == 201) {
         CategoryResponse categoryResponse =
             CategoryResponse.fromJson(response.data);
+
         for (var data in categoryResponse.data!) {
           dropdownCategoryList.add(
             DropdownCategory(
@@ -33,7 +35,3 @@ class CategoryAPI {
     return dropdownCategoryList;
   }
 }
-
-
-
-

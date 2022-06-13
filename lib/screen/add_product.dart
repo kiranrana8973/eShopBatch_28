@@ -65,7 +65,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
   var isFeaturedController = TextEditingController(text: "false");
 
   String? _dropdownvalue;
-  String? value;
+  String? _value;
 
   @override
   Widget build(BuildContext context) {
@@ -136,8 +136,9 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 FutureBuilder<List<DropdownCategory?>>(
                   future: CategoryRepository().loadCategory(),
                   builder: (context, snapshot) {
-                    _dropdownvalue = snapshot.data![0]!.id!;
                     if (snapshot.hasData) {
+                      _dropdownvalue = snapshot.data![0]!.id!;
+
                       return DropdownButtonFormField(
                         decoration: const InputDecoration(
                           border: OutlineInputBorder(),
@@ -146,7 +147,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                         ),
                         onChanged: (String? newValue) {
                           setState(() {
-                            value = newValue!;
+                            _value = newValue!;
                           });
                         },
                         // Initial Value
@@ -208,7 +209,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                         name: nameController.text,
                         description: descriptionController.text,
                         price: double.parse(priceController.text),
-                        category: value,
+                        category: _value,
                         countInStock: int.parse(countInStockController.text),
                         rating: int.parse(ratingController.text),
                         numReviews: int.parse(numReviewsController.text),

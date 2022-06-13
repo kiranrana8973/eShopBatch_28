@@ -4,9 +4,9 @@ part 'dropdown_category.g.dart';
 
 @JsonSerializable()
 class DropdownCategory {
-  @JsonKey(name: '_id')
-  String? id;
-  String? name;
+    @JsonKey(name: '_id')
+    String? id;
+    String? name;
 
   DropdownCategory({
     this.id,

@@ -27,11 +27,10 @@ class UserAPI {
 
   Future<bool> login(String username, String password) async {
     try {
-      var url = baseUrl + loginUrl;
       var dio = HttpServices().getDioInstance();
 
       var response = await dio.post(
-        url,
+        loginUrl,
         data: {
           "username": username,
           "password": password,

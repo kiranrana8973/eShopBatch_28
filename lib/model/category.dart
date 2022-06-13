@@ -24,5 +24,3 @@ class Category {
 
   Map<String, dynamic> toJson() => _$CategoryToJson(this);
 }
-
-
