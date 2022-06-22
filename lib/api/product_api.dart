@@ -22,7 +22,6 @@ class ProductAPI {
           contentType: MediaType("image", mimeType!.split("/")[1]),
         ); // image/jpeg -> jpeg
       }
-
       var formData = FormData.fromMap({
         "name": product.name,
         "description": product.description,
@@ -34,7 +33,7 @@ class ProductAPI {
         "numReviews": product.numReviews,
         "isFeatured": product.isFeatured,
       });
-      
+
       var response = await dio.post(productUrl,
           data: formData,
           options: Options(
@@ -70,6 +69,7 @@ class ProductAPI {
     return productResponse;
   }
 }
+
 
 
    // var formData = FormData.fromMap(

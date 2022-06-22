@@ -16,3 +16,4 @@ class ProductResponse {
 
   Map<String, dynamic> toJson() => _$ProductResponseToJson(this);
 }
+

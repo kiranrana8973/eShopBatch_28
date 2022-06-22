@@ -5,16 +5,17 @@ import 'package:eshopping/screen/bottom_screen/profile.dart';
 import 'package:eshopping/screen/dashboard.dart';
 import 'package:eshopping/screen/login.dart';
 import 'package:eshopping/screen/register.dart';
-import 'package:eshopping/screen/splash.dart';
+import 'package:eshopping/screen/wearos/wear_dashboard.dart';
+import 'package:eshopping/screen/wearos/wear_login.dart';
 import 'package:flutter/material.dart';
 
 void main() {
   runApp(
     MaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: '/',
+      initialRoute: '/wearOsLogin',
       routes: {
-        '/': (context) => const SplashScreen(),
+        // '/': (context) => const SplashScreen(),
         '/login': (context) => const LoginScreen(),
         '/register': (context) => const RegisterScreen(),
         '/dashboard': (context) => const DashboardScreen(),
@@ -22,6 +23,8 @@ void main() {
         '/profile': (context) => const ProfileScreen(),
         '/cart': (context) => const CartScreen(),
         '/addProduct': (context) => const AddProductScreen(),
+        '/': (context) => const WearOsLoginScreen(),
+        '/wearOsDashboard': (context) => const WearOsDashboardScreen(),
       },
     ),
   );

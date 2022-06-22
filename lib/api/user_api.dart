@@ -9,11 +9,10 @@ class UserAPI {
   Future<bool> registerUser(User user) async {
     bool isLogin = false;
     Response response;
-    var url = baseUrl + registerUrl;
     var dio = HttpServices().getDioInstance();
     try {
       response = await dio.post(
-        url,
+        registerUrl,
         data: user.toJson(),
       );
       if (response.statusCode == 200) {
@@ -28,7 +27,6 @@ class UserAPI {
   Future<bool> login(String username, String password) async {
     try {
       var dio = HttpServices().getDioInstance();
-
       var response = await dio.post(
         loginUrl,
         data: {

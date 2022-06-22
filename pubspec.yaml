@@ -36,6 +36,8 @@ dependencies:
   json_serializable: ^6.2.0
   image_picker: ^0.8.5+3
   mime: ^1.0.2
+  wear: ^1.1.0
+  fluttertoast: ^8.0.9
   
 dev_dependencies:
   flutter_test:

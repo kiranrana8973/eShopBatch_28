@@ -20,6 +20,10 @@ class HttpServices {
       return _dio!;
     }
   }
+}
+
+
+
 
   // initializeInterceptor() {
   //   _dio.interceptors.add(
@@ -36,4 +40,3 @@ class HttpServices {
   //     ),
   //   );
   // }
-}

@@ -1,5 +1,6 @@
 import 'package:eshopping/repositories/product_repositories.dart';
 import 'package:eshopping/response/product_category.dart';
+import 'package:eshopping/utils/api_url.dart';
 import 'package:flutter/material.dart';
 import '../../response/get_product_response.dart';
 
@@ -36,7 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
           future: ProductRepository().getProducts(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
-              if (snapshot.data != null) {
+              if (snapshot.hasData) {
                 // ProductResponse productResponse = snapshot.data!;
                 List<ProductCategory> lstProductCategory = snapshot.data!.data!;
 
@@ -44,13 +45,18 @@ class _HomeScreenState extends State<HomeScreen> {
                   itemCount: snapshot.data!.data!.length,
                   itemBuilder: (context, index) {
                     return ListTile(
-                      leading: CircleAvatar(
-                        backgroundImage: NetworkImage(
-                          lstProductCategory[index]
-                              .image!
-                              .replaceAll('localhost', '10.0.2.2'),
-                        ),
-                      ),
+                      leading: baseUrl.contains('10.0.2.2')
+                          ? CircleAvatar(
+                              backgroundImage: NetworkImage(
+                                lstProductCategory[index]
+                                    .image!
+                                    .replaceAll('localhost', '10.0.2.2'),
+                              ),
+                            )
+                          : CircleAvatar(
+                              backgroundImage: NetworkImage(
+                                  lstProductCategory[index].image!),
+                            ),
                       title: Text(lstProductCategory[index].name!),
                       subtitle: Text(snapshot.data!.data![index].description!),
                       trailing: IconButton(
@@ -62,21 +68,15 @@ class _HomeScreenState extends State<HomeScreen> {
                 );
               } else {
                 return const Center(
-                  child: Text("No data"),
+                  child: Text('No data'),
                 );
               }
             } else if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(
                 child: CircularProgressIndicator(),
               );
-            } else if (snapshot.hasError) {
-              return Text("${snapshot.error}");
             } else {
-              return const Center(
-                child: CircularProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
-                ),
-              );
+              return const Text('Error retrieving data');
             }
           },
         ),
