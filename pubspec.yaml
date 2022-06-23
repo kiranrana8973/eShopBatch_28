@@ -39,17 +39,22 @@ dependencies:
   wear: ^1.1.0
   fluttertoast: ^8.0.9
   
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter
   build_runner: ^2.1.10
   floor_generator: ^1.2.0
   flutter_lints: ^2.0.0
+  flutter_launcher_icons: ^0.9.3
 
-# For information on the generic Dart part of this file, see the
-# following page: https://dart.dev/tools/pub/pubspec
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/logo/logo.png"
 
 # The following section is specific to Flutter packages.
+
 flutter:
 
   # The following line ensures that the Material Icons font is
@@ -58,9 +63,9 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
-  #   - assets/svg
-  #   - images/a_dot_ham.jpeg
+  assets:
+    - assets/svg/
+    - assets/logo/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
