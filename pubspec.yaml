@@ -47,6 +47,7 @@ dev_dependencies:
   floor_generator: ^1.2.0
   flutter_lints: ^2.0.0
   flutter_launcher_icons: ^0.9.3
+  test: any
 
 flutter_icons:
   android: true
